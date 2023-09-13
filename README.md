@@ -23,15 +23,18 @@ Add the Code Snippet to functions.php:
 On the right side, find and click on the functions.php file.
 Scroll to the bottom of the file and paste the following code snippet:
 
-_**function hide_help() {**_
+```
 
-_**if (is_admin()) { echo '<style type="text/css">**_
+function hide_help() {
+    if (is_admin()) {
+        echo '<style type="text/css">
+                #contextual-help-link-wrap { display: none !important; }
+              </style>';
+    }
+}
+add_action('admin_head', 'hide_help');
 
-_**#contextual-help-link-wrap { display: none !important; }**_
-
-_**</style>';  } }**_
-
-_**add_action('admin_head', 'hide_help');**_
+```
 
 This part of the code will hide the Help tab.
 
@@ -42,14 +45,16 @@ Customize Screen Options (Optional):
 
 If you want to customize the Screen Options tab, you can paste the following code snippet below the previous one:
 
-_**function wpb_remove_screen_options() {**_
+```
+function wpb_remove_screen_options() { 
+    if (!current_user_can('manage_options')) {
+        return false;
+    }
+    return true; 
+}
+add_filter('screen_options_show_screen', 'wpb_remove_screen_options');
 
-_**if (!current_user_can('manage_options')) {**_
-
-_**return false;     }    return true;  }**_
-
-_**add_filter('screen_options_show_screen', 'wpb_remove_screen_options');**_
-
+```
 
 This part of the code allows you to hide the Screen Options tab for users who do not have the "manage_options" capability (typically administrators).
 
